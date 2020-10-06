@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Post
 
 posts = [
     {
@@ -19,6 +20,6 @@ posts = [
 
 def Home(request):
     context = {
-        'posts': posts
+        'posts': Post.objects.all()
     }
     return render(request, 'feed/feed_temp.html', context)
