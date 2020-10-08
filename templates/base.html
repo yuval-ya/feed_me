@@ -35,7 +35,10 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav ml-auto">
               {% if user.is_authenticated %}
-                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'profile' %}">
+                  <img class="rounded-circle" width="40px" height="40px" src="{{ user.profile.image.url }}"> 
+                <a class="nav-item nav-link" href="{% url 'profile' %}">{{ user.username }}'s Profile</a>
+                </a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
                {#  <a class="nav-item nav-link" href="{% url 'login' %}">Login</a> #}
