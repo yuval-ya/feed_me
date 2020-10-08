@@ -34,8 +34,13 @@
 
             <!-- Navbar Right Side -->
             <div class="navbar-nav ml-auto">
-              <a class="nav-item nav-link" href="#">Login</a>
-              <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+              {% if user.is_authenticated %}
+                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+              {% else %}
+               {#  <a class="nav-item nav-link" href="{% url 'login' %}">Login</a> #}
+                <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -47,7 +52,7 @@
         <div class="col-md-8">
             {% block content %}{% endblock %}
         </div>
-        {% if title  != register %}
+        {% if title == 'Home' %}
         <div class="col-md-4">
           <div class="content-section">
             <h3>Our Sidebar</h3>
@@ -61,8 +66,8 @@
             </p>
           </div>
         </div>
-      {% endif%}
       </div>
+      {% endif %}
     </main>
     <div class="fixed-bottom">
        {% if messages %}

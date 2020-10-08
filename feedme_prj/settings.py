@@ -121,9 +121,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+# this allows us to use the base.html file from any template folder
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, 'static')),
 )
 
+# using a designed form
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# this URL name is the route where the user will redirect after he has been logged in
+LOGIN_REDIRECT_URL = 'feed-home'
+# redirect to the login page afrer the user try to get to 'account only' route
+LOGIN_URL = 'login'
