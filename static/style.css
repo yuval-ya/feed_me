@@ -73,8 +73,8 @@ a.article-title:hover {
 }
 
 .account-img {
-  height: 125px;
-  width: 125px;
+  height: 75px;
+  width: 75px;
   margin-right: 20px;
   margin-bottom: 16px;
 }
@@ -82,3 +82,10 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+#right-panel-link {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
