@@ -1,8 +1,18 @@
 from django.shortcuts import render, redirect
 from .forms import UserRegisterForm, ProfileUpdateForm, UserUpdateForm
+from .models import Profile
+from feed.models import Post
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.views.generic import (
+    DeleteView
+)
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin
+)
 
 
 def register(request):
@@ -13,7 +23,8 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
-            user.profile.image = form.cleaned_data.get('image')
+            if form.cleaned_data.get('image'):
+                user.profile.image = form.cleaned_data.get('image')
             username = form.cleaned_data.get('username')
             user.save()
             messages.success(
@@ -37,7 +48,7 @@ def update_profile(request):
             u_form.save()
             p_form.save()
             messages.success(request, f"Your account has been updated.")
-            return redirect('profile')
+            return redirect('myprofile')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -50,5 +61,11 @@ def update_profile(request):
 
 
 @ login_required
-def Profile(request):
-    return render(request, 'users/profile.html')
+def my_profile_view(request):
+    profile = Profile.objects.get(user=request.user)
+    posts = Post.objects.filter(author=request.user)
+    context = {
+        'profile': profile,
+        'posts': posts,
+    }
+    return render(request, 'users/myprofile.html', context)

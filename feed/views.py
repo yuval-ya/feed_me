@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreatePostForm
 from django.views.generic import (
+    CreateView,
     ListView,
     DetailView,
     UpdateView,
@@ -18,29 +19,36 @@ from django.contrib.auth.mixins import (
 
 @login_required
 def feed_view(request):
-    if request.method == "POST":
-        q_form = CreatePostForm(request.POST)
-        q_form.instance.author = request.user
-        if q_form.is_valid():
-            q_form.save()
-            messages.success(
-                request, f"Post Created.")
-            return redirect('feed-home')
-        else:
-            messages.warning(request, "Failed to create the post")
-    else:
-        q_form = CreatePostForm()
 
     context = {
         'posts': Post.objects.all(),
-        'q_form': q_form
     }
 
-    return render(request, 'feed/feed.html', context)
+    return render(request, 'feed/feed_home.html', context)
 
 
 class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
+
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['content']
+
+    def get_success_url(self):
+        messages.success(
+            self.request, "Post Created.")
+        return reverse('feed-home')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -48,6 +56,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['content']
 
     def get_success_url(self):
+        messages.success(
+            self.request, "Post Updated.")
         return reverse('feed-home')
 
     def form_valid(self, form):
@@ -65,6 +75,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
 
     def get_success_url(self):
+        messages.info(self.request, "Post Deleted")
         return reverse('feed-home')
 
     def form_valid(self, form):

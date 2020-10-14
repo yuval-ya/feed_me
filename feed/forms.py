@@ -7,5 +7,5 @@ class CreatePostForm(ModelForm):
         model = Post
         fields = ['content']
         labels = {
-            'content': 'Create a new post:',
+            'content': '',
         }
