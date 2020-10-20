@@ -12,6 +12,14 @@ ul {
   margin: 0;
 }
 
+.fa .black{
+  color: black;
+}
+
+.ml-12 {
+  margin-left: 12px;
+}
+
 .bg-steel {
   background-color: #dc143c;
 }
@@ -42,6 +50,9 @@ ul {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+
 }
 
 .article-title {
@@ -98,29 +109,6 @@ a.article-title:hover {
   right: 10px;
 }
 
-.thumbnail
-{
-      width: 200px;
-      height: 180px;
-      overflow: hidden;
-      margin: auto;
-}
-.thumbnail img {
-    width: 180px;
-    height: 100%;
-    object-fit: cover;
-}
-
-
-.profile-page .profile-body .left-wrapper .social-links a {
-    width: 30px;
-    height: 30px;
-}
-
-.rtl .profile-page .profile-header .cover .cover-body .profile-name {
-    margin-left: 0;
-    margin-right: 17px;
-}
 .img-xs {
     width: 40px;
     height: 40px;
@@ -129,6 +117,7 @@ a.article-title:hover {
 .card-header:first-child {
     border-radius: 0 0 0 0;
 }
+
 .card-header {
     padding: 0.875rem 1.5rem;
     margin-bottom: 0;
@@ -169,7 +158,11 @@ a.article-title:hover {
 }
 
 
-
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .h7 {
     font-size: 0.8rem;

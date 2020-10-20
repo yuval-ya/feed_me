@@ -4,12 +4,12 @@
    <img class="rounded-circle account-img" src="{{ object.author.profile.image.url }}">
    <div class="media-body">
    <div class="article-metadata">
-      <a class="mr-2" href="#">{{ object.author }}</a>
+      <a class="mr-2" href="#">{{ object.author.user }}</a>
       <small class="text-muted">{{ object.date_posted|date:"F d" }} at {{ object.date_posted|date:"P" }}</small>
    </div>
    <p class="article-content">{{ object.content }}</p>
 
-   {% if post.author == user %}
+   {% if post.author.user == user %}
    <div class="btn-group" role="group" aria-label="Basic example">
    <button type="button" class="btn btn-secondary btn-sm mt-1 mb-1 " data-toggle="modal" data-target="#UpdateModal" data-whatever={{ post.content }}>Update Post</button>
    <button type="button" class="btn btn-secondary btn-sm mt-1 mb-1 " data-toggle="modal" data-target="#deleteModal">

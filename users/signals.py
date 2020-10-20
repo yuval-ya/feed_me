@@ -1,7 +1,8 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Profile, Relationship
+from os import remove
 
 
 @receiver(post_save, sender=User)

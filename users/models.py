@@ -9,7 +9,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
-    image = models.ImageField(default='avatar.png', upload_to='profile_pics')
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     friends = models.ManyToManyField(User, blank=True, related_name='friends')
     slug = models.SlugField(unique=True, blank=True)
     fav_food = models.CharField(max_length=100, blank=True)
@@ -39,8 +39,8 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
         img = Image.open(self.image.path)
-        if img.height > 600 or img.width > 600:
-            output_size = (600, 600)
+        if img.height > 400 or img.width > 400:
+            output_size = (400, 400)
             img.thumbnail(output_size)
             img.save(self.image.path)
 
