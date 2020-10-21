@@ -22,7 +22,6 @@ def feed_view(request):
     qs = Post.objects.all()
     profile = request.user.profile
     p_form = CreatePostForm()
-    u_form = CreatePostForm()
 
     if 'submit_p_form' in request.POST:
         p_form = CreatePostForm(request.POST, request.FILES)
@@ -33,18 +32,9 @@ def feed_view(request):
             p_form = CreatePostForm()
             messages.success(request, "Post Created.")
 
-    if 'submit_u_form' in request.POST:
-        post_id = request.POST.get()
-        post = get_object_or_404(Post, id=post_id)
-        u_form = CreatePostForm(request.POST, request.FILES, instance=post)
-        if p_form.is_valid():
-            u_form.save()
-            messages.success(request, "Post Created.")
-
     context = {
         'posts': qs,
         'p_form': p_form,
-        'u_form': u_form
     }
 
     return render(request, 'feed/feed_home.html', context)
@@ -52,7 +42,9 @@ def feed_view(request):
 
 @login_required
 def post_liked_unliked_view(request, post_id):
+
     user = request.user
+
     if request.method == 'POST':
         post_obj = get_object_or_404(Post, id=post_id)
         profile = user.profile

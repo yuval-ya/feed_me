@@ -9,6 +9,7 @@
       <div class="col-md-3">
   </div>
       <div class="col-md-6 gedf-main">
+
          <!--- Create Post-->
          <div class="card gedf-card">
             <div class="card-header">
@@ -17,7 +18,7 @@
             <div class="card-body">
                <div class="tab-content" id="myTabContent">
                   <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                     <form action="" method="POST" enctype="multipart/form-data">
+                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
                            {{ p_form|crispy }}
@@ -31,6 +32,7 @@
                </form>
             </div>
          </div>
+
          <!-- Posts -->
          {% for post in posts %}
          <div class="card gedf-card">
@@ -53,34 +55,10 @@
                         Options<i class="fa fa-ellipsis"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                           <button type="button" class="dropdown-item" data-toggle="modal" data-target="#updateModal{{post.id}}">Update Post</button>
+                           <a type="button" class="dropdown-item" href="{% url 'post-update' post.id %}">Update Post</a>
                            <button type="button" class="dropdown-item" data-toggle="modal" data-target="#deleteModal{{post.id}}">Delete Post</button>
                      </div>
-                        <!-- UPDATE MODAL -->
-                     <div class="modal fade" id="updateModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                           <div class="modal-content">
-                              <div class="modal-header">
-                                 <h5 class="modal-title" id="exampleModalLabel">Update your Post</h5>
-                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                 <span aria-hidden="true">&times;</span>
-                                 </button>
-                              </div>
-                              <form action="{% url 'post-update' post.id %}" method="POST" enctype="multipart/form-data">
-                                 <div class="modal-body">
-                                    {% csrf_token %}
-                                    <textarea class="form-control" name="content" id="content"  rows=9 >{{ post.content}}</textarea>
-                                    <input type="file" name="image" accept="image/*" class="mt-2" value="{{ post.image.path }}">
-                                 </div>
-                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary btn-sm mt-1 mb-1" data-dismiss="modal">Close</button>
-                                    <input class="btn btn-secondary btn-sm mt-1 mb-1 pull-right" type="submit" value="Save Changes">
-                                 </div>
-                              </form>
-                           </div>
-                        </div>
-                     </div>
-                        <!-- END UPDATE MODAL  -->
+
                         <!-- DELETE MODAL -->
                      <div class="modal fade" id="deleteModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -116,7 +94,7 @@
                   {{ post.content }}
                </p>
                {% if post.image %}
-               <img src="{{ post.image.url }}" class="img-thumbnail" style="max-height: 500px">
+                  <img src="{{ post.image.url }}" class="img-thumbnail" style="max-height: 500px">
                {% endif %}
             </div>
             <div class="card-footer">
@@ -140,3 +118,31 @@
    </div>
 </div>
 {% endblock content %}
+
+
+
+                        <!-- UPDATE MODAL -->
+                     <!-- <div class="modal fade" id="updateModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="exampleModalLabel">Update your Post</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <form action="{% url 'post-update' post.id %}" method="POST" enctype="multipart/form-data">
+                                 <div class="modal-body">
+                                    {% csrf_token %}
+                                    <textarea class="form-control" name="content" id="content"  rows=9 >{{ post.content}}</textarea>
+                                    <input type="file" name="image" accept="image/*" class="mt-2" value="{{ post.image.path }}">
+                                 </div>
+                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary btn-sm mt-1 mb-1" data-dismiss="modal">Close</button>
+                                    <input class="btn btn-secondary btn-sm mt-1 mb-1 pull-right" type="submit" value="Save Changes">
+                                 </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div> -->
+                        <!-- END UPDATE MODAL  -->
