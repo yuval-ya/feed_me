@@ -5,7 +5,8 @@ class CreatePostForm(ModelForm):
 
     class Meta:
         model = Post
-        fields = ['content']
+        fields = ['content', 'image']
         labels = {
-            'content': 'Create a new post:',
+            'content': '',
+            'image': 'Add an image:'
         }

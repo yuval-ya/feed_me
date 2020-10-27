@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}- Home {% endblock %}
+
+{% block content %}
+<div class="container-fluid gedf-wrapper">
+   <div class="row">
+      <div class="col-md-3">
+  </div>
+      <div class="col-md-6 gedf-main">
+         <!--- Create Post-->
+         <div class="card gedf-card">
+            <div class="card-header">
+               <h6>Share your food love here:</h6>
+            </div>
+            <div class="card-body">
+               <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                     <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                           {{ p_form|crispy }}
+                        </div>
+                  </div>
+               </div>
+               <div class="btn-group">
+               <button type="submit" name="submit_p_form" class="btn btn-danger">share</button>
+               </div>
+
+               </form>
+            </div>
+         </div>
+         <!-- Posts -->
+         {% for post in posts %}
+         <div class="card gedf-card">
+            <div class="card-header">
+               <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex justify-content-between align-items-center">
+                     <div class="mr-2">
+                        <img class="rounded-circle article-img" src="{{ post.author.image.url }}" alt="">
+                     </div>
+                     <div class="ml-2">
+                        <a class="h5 m-0" href="{% url 'user_profile' post.author.slug %}">@{{ post.author.user}}</a>
+                        <div class="h7 text-muted">{{ post.author.first_name}} {{ post.author.last_name}}</div>
+                     </div>
+                  </div>
+
+                  <div>
+                     {% if post.author.user == user %}
+                     <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Options<i class="fa fa-ellipsis"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                           <button type="button" class="dropdown-item" data-toggle="modal" data-target="#updateModal{{post.id}}">Update Post</button>
+                           <button type="button" class="dropdown-item" data-toggle="modal" data-target="#deleteModal{{post.id}}">Delete Post</button>
+                     </div>
+                        <!-- UPDATE MODAL -->
+                     <div class="modal fade" id="updateModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="exampleModalLabel">Update your Post</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <form action="{% url 'post-update' post.id %}" method="POST" enctype="multipart/form-data">
+                                 <div class="modal-body">
+                                    {% csrf_token %}
+                                    <textarea class="form-control" name="content" id="content"  rows=9 >{{ post.content}}</textarea>
+                                    <input type="file" name="image" accept="image/*" class="mt-2" value="{{ post.image.path }}">
+                                 </div>
+                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary btn-sm mt-1 mb-1" data-dismiss="modal">Close</button>
+                                    <input class="btn btn-secondary btn-sm mt-1 mb-1 pull-right" type="submit" value="Save Changes">
+                                 </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                        <!-- END UPDATE MODAL  -->
+                        <!-- DELETE MODAL -->
+                     <div class="modal fade" id="deleteModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">
+                                 Are you sure you want to delete the post?
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn btn-secondary btn-sm mt-1 mb-1" data-dismiss="modal">Close</button>
+                                 <form action="{% url 'post-delete' post.id %}" method="post">
+                                 {% csrf_token %}
+                                 <input class="btn btn-secondary btn-sm mt-1 mb-1 pull-right" type="submit" value="Delete post">
+                              </form>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                        <!-- END DELETE MODAL  -->
+                  </div>
+                     {% endif %}
+                  </div>
+               </div>
+            </div>
+            <div class="card-body">
+               <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o  mr-1"></i>{{ post.date_posted|date:"F d" }} at {{ post.date_posted|date:"P" }}</div>
+               <p class="card-text">
+                  {{ post.content }}
+               </p>
+               {% if post.image %}
+               <img src="{{ post.image.url }}" class="img-thumbnail" style="max-height: 500px">
+               {% endif %}
+            </div>
+            <div class="card-footer">
+               <form action="{% url 'like-post' post.id %}" method="POST">
+                  {% csrf_token %}
+                   <input type="hidden" name="post_id">
+                  {% if user.profile in post.get_profiles_liked %}
+                   <button type="submit" class="btn btn-danger "><i class="fas fa-heart mr-1"></i>Liked
+                  {% else %}
+                   <button type="submit" class="btn "><i class="fas fa-heart black mr-1"></i>Like
+                  {% endif %}
+                  </button>
+               </form>
+            </div>
+         </div>
+        {% endfor %}
+         <!-- End Posts /////-->
+      </div>
+      <div class="col-md-3">
+      </div>
+   </div>
+</div>
+{% endblock content %}
