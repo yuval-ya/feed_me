@@ -15,6 +15,9 @@ class Profile(models.Model):
     fav_food = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now=True)
 
+    # followers = ManyToManyField(Profile, blank=True, related_name='followers')
+    # following = ManyToManyField(Profile, blank=True, related_name='following')
+
     def get_friends(self):
         return self.friends.all()
 
@@ -50,6 +53,17 @@ STATUS_CHOICES = (
     ('accepted', 'accepted')
 )
 
+
+# class Relationship(models.Model):
+#     sender = models.ForeignKey(
+#         Profile, on_delete=models.CASCADE, related_name='sender')
+#     receiver = models.ForeignKey(
+#         Profile, on_delete=models.CASCADE, related_name='receiver')
+#     status = models.CharField(max_length=8, choices=STATUS_CHOICES)
+#     created = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+# return f"{self.sender}, {self.receiver} - {self.status}"
 
 class Relationship(models.Model):
     sender = models.ForeignKey(
